@@ -8,7 +8,7 @@
             do { if (DEBUG) fprintf(stderr, fmt); } while (0)
 /*  Bron: https://stackoverflow.com/questions/1644868/
     define-macro-for-debug-printing-in-c */
-    
+
 struct queue {
     int *data;
     size_t rear;
@@ -85,9 +85,17 @@ int queue_push(struct queue *q, int e) {
         return 1;
     }
 
-    if(q->size == q->capacity) {
-        debug_print("Queue is full, element not added\n");
-        return 1;
+    if(q->size >= q->capacity) {
+        debug_print("Maximum number of elements on queue reached, queue will be reallocated\n");
+
+        // If the capacity was 0, then realloc at least a capacity of 2 * 1
+        if(q->capacity == 0) {
+            q->capacity = 1;
+        }
+
+        // Realloc twice the previous capacity
+        q->data = realloc(q->data, 2 * q->capacity * sizeof(int));
+        q->capacity *= 2;
     }
 
     size_t front = (q->rear + q->size) % q->capacity;
