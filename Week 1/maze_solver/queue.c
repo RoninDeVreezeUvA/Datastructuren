@@ -3,7 +3,7 @@
 
 #include "queue.h"
 
-#define DEBUG 0
+#define DEBUG 1
 #define debug_print(fmt) \
             do { if (DEBUG) fprintf(stderr, fmt); } while (0)
 /*  Bron: https://stackoverflow.com/questions/1644868/
@@ -86,16 +86,8 @@ int queue_push(struct queue *q, int e) {
     }
 
     if(q->size >= q->capacity) {
-        debug_print("Maximum number of elements on queue reached, queue will be reallocated\n");
-
-        // If the capacity was 0, then realloc at least a capacity of 2 * 1
-        if(q->capacity == 0) {
-            q->capacity = 1;
-        }
-
-        // Realloc twice the previous capacity
-        q->data = realloc(q->data, 2 * q->capacity * sizeof(int));
-        q->capacity *= 2;
+        debug_print("Maximum number of elements on queue reached\n");
+        return 1;
     }
 
     size_t front = (q->rear + q->size) % q->capacity;
