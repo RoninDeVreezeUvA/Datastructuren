@@ -8,7 +8,7 @@
             do { if (DEBUG) fprintf(stderr, fmt); } while (0)
 /*  Bron: https://stackoverflow.com/questions/1644868/
     define-macro-for-debug-printing-in-c */
-    
+
 struct stack {
     int *data;
     size_t size;
@@ -83,8 +83,16 @@ int stack_push(struct stack *s, int c) {
     }
 
     if(s->size >= s->capacity) {
-        debug_print("Maximum number of elements on stack reached, element not added\n");
-        return 1;
+        debug_print("Maximum number of elements on stack reached, stack will be reallocated\n");
+
+        // If the capacity was 0, then realloc at least a capacity of 2 * 1
+        if(s->capacity == 0) {
+            s->capacity = 1;
+        }
+
+        // Realloc twice the previous capacity
+        s->data = realloc(s->data, 2 * s->capacity * sizeof(int));
+        s->capacity *= 2;
     }
 
     s->data[s->size] = c;
