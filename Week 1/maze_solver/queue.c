@@ -3,28 +3,32 @@
 
 #include "queue.h"
 
+#define DEBUG 0
+#define debug_print(fmt) \
+            do { if (DEBUG) fprintf(stderr, fmt); } while (0)
+
 struct queue {
     int *data;
-    int rear;
-    int size;
+    size_t rear;
+    size_t size;
 
     int num_of_pushes;
     int num_of_pops;
-    int max_elements;
+    size_t max_elements;
 
-    int capacity;
+    size_t capacity;
 };
 
 struct queue *queue_init(size_t capacity) {
     struct queue *queue_ptr = malloc(sizeof(struct queue));
     if(queue_ptr == NULL) {
-        perror("Could not allocate memory for queue struct\n");
+        debug_print("Could not allocate memory for queue struct\n");
         return NULL;
     }
     
     queue_ptr->data = malloc(sizeof(int) * capacity);
     if(queue_ptr->data == NULL) {
-        perror("Could not allocate memory for queue data\n");
+        debug_print("Could not allocate memory for queue data\n");
         free(queue_ptr);
         return NULL;
     }
@@ -42,12 +46,12 @@ struct queue *queue_init(size_t capacity) {
 
 void queue_cleanup(struct queue *q) {
     if(q == NULL) {
-        perror("Invalid queue struct in queue_cleanup\n");
+        debug_print("Invalid queue struct in queue_cleanup\n");
         return;
     }
 
     if(q->data == NULL) {
-        perror("Invalid queue data in queue_cleanup\n");
+        debug_print("Invalid queue data in queue_cleanup\n");
         free(q);
         return;
     }
@@ -58,11 +62,11 @@ void queue_cleanup(struct queue *q) {
 
 void queue_stats(const struct queue *q) {
     if(q == NULL) {
-        perror("Invalid queue struct in queue_stats\n");
+        debug_print("Invalid queue struct in queue_stats\n");
         return;
     }
 
-    fprintf(stderr, "stats %d %d %d\n", 
+    fprintf(stderr, "stats %d %d %ld\n", 
                     q->num_of_pushes, 
                     q->num_of_pops, 
                     q->max_elements);
@@ -70,21 +74,21 @@ void queue_stats(const struct queue *q) {
 
 int queue_push(struct queue *q, int e) {
     if(q == NULL) {
-        perror("Invalid queue struct in queue_push\n");
+        debug_print("Invalid queue struct in queue_push\n");
         return 1;
     }
 
     if(e < 0) {
-        perror("No negative numbers are allowed in the queue\n");
+        debug_print("No negative numbers are allowed in the queue\n");
         return 1;
     }
 
     if(q->size == q->capacity) {
-        perror("Queue is full, element not added\n");
+        debug_print("Queue is full, element not added\n");
         return 1;
     }
 
-    int front = (q->rear + q->size) % q->capacity;
+    size_t front = (q->rear + q->size) % q->capacity;
 
     q->data[front] = e;
     q->size++;
@@ -99,12 +103,12 @@ int queue_push(struct queue *q, int e) {
 
 int queue_pop(struct queue *q) {
     if(q == NULL) {
-        perror("Invalid queue struct in queue_pop\n");
+        debug_print("Invalid queue struct in queue_pop\n");
         return -1;
     }
 
     if(q->size <= 0) {
-        perror("Queue is empty, can't pop element\n");
+        debug_print("Queue is empty, can't pop element\n");
         return -1;
     }
 
@@ -122,12 +126,12 @@ int queue_pop(struct queue *q) {
 
 int queue_peek(const struct queue *q) {
     if(q == NULL) {
-        perror("Invalid queue struct in queue_peek\n");
+        debug_print("Invalid queue struct in queue_peek\n");
         return -1;
     }
 
     if(q->size <= 0) {
-        perror("Queue is empty, can't peek element\n");
+        debug_print("Queue is empty, can't peek element\n");
         return -1;
     }
 
@@ -136,7 +140,7 @@ int queue_peek(const struct queue *q) {
 
 int queue_empty(const struct queue *q) {
    if(q == NULL) {
-        perror("Invalid queue struct in queue_empty\n");
+        debug_print("Invalid queue struct in queue_empty\n");
         return -1;
     }
 
