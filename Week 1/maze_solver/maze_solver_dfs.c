@@ -13,6 +13,7 @@
 
 #define MAX_MAZE_SIZE 4000
 
+// Store all the predecessors to reconstruct the path later
 int predecessor[MAX_MAZE_SIZE*MAX_MAZE_SIZE]; 
 
 /* Checks if the given move is possile (next tile is not visited and not wall)
@@ -21,11 +22,9 @@ int predecessor[MAX_MAZE_SIZE*MAX_MAZE_SIZE];
 */
 int check_neighbour(struct maze *m, struct stack *s, 
                              int move, int current_index) {
-    // Calculate the new row and column
+    // Calculate the new row and column and get the char at the position
     int new_r = maze_row(m, current_index) + m_offsets[move][0];
     int new_c = maze_col(m, current_index) + m_offsets[move][1];
-
-    // Get the char at the next position
     char new_position = maze_get(m, new_r, new_c);
 
     // Check if the next position is a unvisited and free to enter

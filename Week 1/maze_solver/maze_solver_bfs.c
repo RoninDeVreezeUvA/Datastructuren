@@ -13,23 +13,23 @@
 
 #define MAX_MAZE_SIZE 4000
 
+// Store all the predecessors to reconstruct the path later
 int predecessor[MAX_MAZE_SIZE*MAX_MAZE_SIZE]; 
+
 /* Checks if the given move is possile (next tile is not visited and not wall)
    If the tile is free it is added to the stack and set to visited.
    The predecessor of the tile is saved in order to recover the solution path.
 */
 int check_neighbour(struct maze *m, struct queue *q, 
                              int move, int current_index) {
-    // Calculate the new row and column
+    // Calculate the new row and column and get the char at the position
     int new_r = maze_row(m, current_index) + m_offsets[move][0];
     int new_c = maze_col(m, current_index) + m_offsets[move][1];
-
-    // Get the char at the next position
     char new_position = maze_get(m, new_r, new_c);
 
     // Check if the next position is a unvisited and free to enter
     if(maze_valid_move(m, new_r, new_c) && new_position == FLOOR) {
-        // Add tile to stack and set to visited
+        // Add tile to queue and set to visited
         if(queue_push(q, maze_index(m, new_r, new_c)) == 1) {
             debug_print("Could not push to queue in check_neighbour");
             return ERROR;
@@ -70,7 +70,7 @@ int bfs_solve(struct maze *m) {
     maze_destination(m, &r_destination, &c_destination);
     int index_destination = maze_index(m, r_destination, c_destination);
 
-    // Add the start tile to the stack and set it to visited
+    // Add the start tile to the queue and set it to visited
     if(queue_push(q, index_start) == 1) {
         debug_print("Could not push element onto queue in bfs_solve");
         return ERROR;
@@ -104,7 +104,7 @@ int bfs_solve(struct maze *m) {
             return path_length;
         }
 
-        // Check each neighbour and add it to the stack if it is valid
+        // Check each neighbour and add it to the queue if it is valid
         for(int move = 0; move < N_MOVES; move++) {
             if(check_neighbour(m, q, move, i) == ERROR) {
                 debug_print("Could not check neighbour in bfs_solve");
