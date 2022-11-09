@@ -7,13 +7,13 @@
 
 #define NOT_FOUND -1
 #define ERROR -2
+#define MAX_MAZE_SIZE 4000
+
+/*  Source: https://stackoverflow.com/questions/1644868/
+    define-macro-for-debug-printing-in-c */
 #define DEBUG 0
 #define debug_print(fmt) \
             do { if (DEBUG) fprintf(stderr, fmt); } while (0)
-/*  Bron: https://stackoverflow.com/questions/1644868/
-    define-macro-for-debug-printing-in-c */
-
-#define MAX_MAZE_SIZE 4000
 
 // Store all the predecessors to reconstruct the path later
 int predecessor[MAX_MAZE_SIZE*MAX_MAZE_SIZE]; 

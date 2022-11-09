@@ -3,11 +3,11 @@
 
 #include "queue.h"
 
-#define DEBUG 1
+/*  Source: https://stackoverflow.com/questions/1644868/
+    define-macro-for-debug-printing-in-c */
+#define DEBUG 0
 #define debug_print(fmt) \
             do { if (DEBUG) fprintf(stderr, fmt); } while (0)
-/*  Bron: https://stackoverflow.com/questions/1644868/
-    define-macro-for-debug-printing-in-c */
 
 struct queue {
     int *data;
@@ -85,8 +85,8 @@ int queue_push(struct queue *q, int e) {
         return 1;
     }
 
-    if(q->size >= q->capacity) {
-        debug_print("Maximum number of elements on queue reached\n");
+    if(q->size == q->capacity) {
+        debug_print("Queue is full, element not added\n");
         return 1;
     }
 

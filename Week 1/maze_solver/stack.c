@@ -3,11 +3,11 @@
 
 #include "stack.h"
 
+/*  Source: https://stackoverflow.com/questions/1644868/
+    define-macro-for-debug-printing-in-c */
 #define DEBUG 0
 #define debug_print(fmt) \
             do { if (DEBUG) fprintf(stderr, fmt); } while (0)
-/*  Bron: https://stackoverflow.com/questions/1644868/
-    define-macro-for-debug-printing-in-c */
 
 struct stack {
     int *data;
@@ -16,40 +16,40 @@ struct stack {
     int num_of_pushes;
     int num_of_pops;
     size_t max_elements;
-
     size_t capacity;
 };
 
 struct stack *stack_init(size_t capacity) {
     struct stack* stack_ptr = malloc(sizeof(struct stack)); 
-    if(stack_ptr == NULL) {
+    if (stack_ptr == NULL) {
         debug_print("Could not allocate memory for stack struct\n");
         return NULL;
     }
     
     stack_ptr->data = malloc(sizeof(int) * capacity);
-    if(stack_ptr->data == NULL) {
+    if (stack_ptr->data == NULL) {
         debug_print("Could not allocate memory for stack data\n");
         free(stack_ptr);
         return NULL;
     }
 
     stack_ptr->size = 0;
-    stack_ptr->capacity = capacity;
 
     stack_ptr->num_of_pushes = 0;
     stack_ptr->num_of_pops = 0;
     stack_ptr->max_elements = 0;
+    stack_ptr->capacity = capacity;
+
     return stack_ptr;
 }
 
 void stack_cleanup(struct stack *s) {
-    if(s == NULL) {
+    if (s == NULL) {
         debug_print("Invalid stack struct in stack_cleanup\n");
         return;
     }
 
-    if(s->data == NULL) {
+    if (s->data == NULL) {
         debug_print("Invalid stack data in stack_cleanup\n");
         free(s);
         return;
@@ -60,7 +60,7 @@ void stack_cleanup(struct stack *s) {
 }
 
 void stack_stats(const struct stack *s) {
-    if(s == NULL) {
+    if (s == NULL) {
         debug_print("Invalid stack struct in stack_stats\n");
         return;
     }
@@ -72,21 +72,21 @@ void stack_stats(const struct stack *s) {
 }
 
 int stack_push(struct stack *s, int c) {
-    if(s == NULL) {
+    if (s == NULL) {
         debug_print("Invalid stack struct in stack_push\n");
         return 1;
     }
 
-    if(c < 0) {
+    if (c < 0) {
         debug_print("No negative numbers are allowed on the stack\n");
         return 1;
     }
 
-    if(s->size >= s->capacity) {
-        debug_print("Maximum number of elements on stack reached, stack will be reallocated\n");
+    if (s->size >= s->capacity) {
+        debug_print("Maximum number of elements on stack reached");
 
         // If the capacity was 0, then realloc at least a capacity of 2 * 1
-        if(s->capacity == 0) {
+        if (s->capacity == 0) {
             s->capacity = 1;
         }
 
@@ -99,7 +99,7 @@ int stack_push(struct stack *s, int c) {
     s->size++;
     s->num_of_pushes++;
 
-    if(s->size > s->max_elements) {
+    if (s->size > s->max_elements) {
         s->max_elements = s->size;
     }
 
@@ -107,13 +107,13 @@ int stack_push(struct stack *s, int c) {
 }
 
 int stack_pop(struct stack *s) {
-    if(s == NULL) {
+    if (s == NULL) {
         debug_print("Invalid stack struct in stack_pop\n");
         return -1;
     }
 
-    if(stack_empty(s) != 0) {
-        debug_print("Stack is empty, can't pop element\n");
+    if (stack_empty(s) != 0) {
+        debug_print("Can't pop element\n");
         return -1;
     }
 
@@ -123,12 +123,12 @@ int stack_pop(struct stack *s) {
 }
 
 int stack_peek(const struct stack *s) {
-    if(s == NULL) {
+    if (s == NULL) {
         debug_print("Invalid stack struct in stack_peek\n");
         return -1;
     }
 
-    if(stack_empty(s) != 0) {
+    if (stack_empty(s) != 0) {
         debug_print("Stack is empty, can't peek element\n");
         return -1;
     }
@@ -137,16 +137,16 @@ int stack_peek(const struct stack *s) {
 }
 
 int stack_empty(const struct stack *s) {
-    if(s == NULL) {
+    if (s == NULL) {
         debug_print("Invalid stack struct in stack_empty\n");
         return -1;
     }
 
-    if(s->size == 0) {
+    if (s->size == 0) {
         return 1;
     }
 
-    if(s->size > 0) {
+    if (s->size > 0) {
         return 0;
     }
 
